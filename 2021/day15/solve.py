@@ -146,21 +146,24 @@ def dijkstra(input, label):
     size = len(input[0])
     grid = "".join(input)
 
-    visited_and_distance = [[0, sys.maxsize] for s in range(size * size)]
-    visited_and_distance[0] = [0, 0]
+    visited_and_distance = [sys.maxsize for s in range(size * size)]
+    visited_and_distance[0] = 0
 
+    seen = set()
     queue = []
     heappush(queue, (0, 0))  # set the starting point
     while queue:
+        # get the lowest value from the priority queue, using risk
         risk, item = heappop(queue)
         if item == size * size - 1:  # found exit
             print(label, risk)
             break
         for i in previous(item, size):
-            if visited_and_distance[i][0] == 0:
+            if i not in seen:
                 r = risk + int(grid[i])
-                visited_and_distance[i] = [1, r]
+                visited_and_distance[i] = r  # the path, not used
                 heappush(queue, (r, i))
+                seen.add(i)
 
 
 def p2(input, label):
